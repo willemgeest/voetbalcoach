@@ -1,3 +1,5 @@
+import xml.dom
+
 import streamlit as st
 from datetime import datetime
 import pytz
@@ -5,6 +7,7 @@ import pytz
 from speler import Speler
 from helpers import voorstel_wissels
 import time
+import random
 
 # Initialiseer sessievariabelen als ze nog niet bestaan
 if 'tijd_in_seconden' not in st.session_state:
@@ -65,7 +68,8 @@ def toon_spelers():
         col1, col2 = st.columns(2)
         with col1:
             st.header("Huidige opstelling")
-            st.session_state.spelers.sort(key=lambda x: x.keeper, reverse=True)
+            st.session_state.spelers.sort(key=lambda x: (-x.keeper, -x.n_wissels, -x.laatste_wissel_sec))
+
             for speler in st.session_state.spelers:
                 if speler.in_veld:
                     bold = "**" if speler.keeper else ""
@@ -86,15 +90,9 @@ placeholder3 = st.empty()
 
 def toon_wissels():
     # mogelijkheden
-    eruit = [speler.naam for speler in st.session_state.spelers if speler.in_veld]
+    eruit = [speler.naam for speler in st.session_state.spelers if speler.in_veld and not speler.keeper]
     erin = [speler.naam for speler in st.session_state.spelers if
             not speler.in_veld and speler.doetmee]
-    # default
-    eruit_voorstel = voorstel_wissels(
-           spelers=[speler for speler in st.session_state.spelers if speler.in_veld],
-            n=len(erin))
-# else:
-    #     st.session_state.eruit_def = st.session_state.eruit
 
     with placeholder3.container():
         col3, col4 = st.columns(2)
