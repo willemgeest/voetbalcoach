@@ -15,17 +15,6 @@ for var in ['spelers', 'erin', 'eruit', 'erin_def', 'eruit_def', 'keeper']:
         st.session_state[var] = []
 
 
-# placeholder voor session state
-placeholder4 = st.empty()
-with placeholder4.container():
-    st.write(st.session_state)
-    st.write(len(st.session_state.spelers))
-    # for speler in st.session_state.spelers:
-    #     st.write(speler.__dict__)
-
-
-
-
 # Titel van de app
 st.title("Marvilde JO8-3 Wissel Management")
 
@@ -91,29 +80,9 @@ def toon_spelers():
 # Toon spelers bij de eerste render
 toon_spelers()
 
-placeholder2 = st.empty()
-# Functie om de timer af te laten tellen
-def start_timer():
-    with placeholder2.container():
-         # Placeholder voor het updaten van de timer in de app
-
-        # Timer loop
-        while st.session_state.tijd_in_seconden > 0:
-            minutes, seconds = divmod(st.session_state.tijd_in_seconden, 60)
-            formatted_time = f"{int(minutes)}:{int(seconds):02d}"
-
-            # Update de placeholder met de resterende tijd
-            placeholder2.title(f"Tijd tot de volgende wissel: {formatted_time}")
-
-            # Wacht 1 seconde
-            time.sleep(1)
-
-            # Verminder de tijd met 1 seconde
-            st.session_state.tijd_in_seconden -= 1
-
-
 # placeholder voor wissels
 placeholder3 = st.empty()
+
 
 def toon_wissels():
     # mogelijkheden
@@ -121,7 +90,7 @@ def toon_wissels():
     erin = [speler.naam for speler in st.session_state.spelers if
             not speler.in_veld and speler.doetmee]
     # default
-    erin_voorstel = voorstel_wissels(
+    eruit_voorstel = voorstel_wissels(
            spelers=[speler for speler in st.session_state.spelers if speler.in_veld],
             n=len(erin))
 # else:
@@ -133,7 +102,8 @@ def toon_wissels():
             st.session_state.eruit = st.multiselect(
                 label="Wie gaan eruit?",
                 options=eruit,
-                default=erin_voorstel
+                max_selections=len(erin)
+                # default=erin_voorstel
             )
 
         with col4:
@@ -156,6 +126,36 @@ if st.button("Wissel"):
                 speler.komt_erin()
         toon_wissels()
         toon_spelers()
-        start_timer()
+
+placeholder2 = st.empty()
+# Functie om de timer af te laten tellen
+def start_timer():
+    st.session_state.tijd_in_seconden = 300
+    with placeholder2.container():
+         # Placeholder voor het updaten van de timer in de app
+
+        # Timer loop
+        while st.session_state.tijd_in_seconden > 0:
+            minutes, seconds = divmod(st.session_state.tijd_in_seconden, 60)
+            formatted_time = f"{int(minutes)}:{int(seconds):02d}"
+
+            # Update de placeholder met de resterende tijd
+            placeholder2.title(f"Tijd tot de volgende wissel: {formatted_time}")
+
+            # Wacht 1 seconde
+            time.sleep(1)
+
+            # Verminder de tijd met 1 seconde
+            st.session_state.tijd_in_seconden -= 1
+
+if st.button("(Her)start timer"):
+    start_timer()
 
 
+    # placeholder voor session state
+# placeholder4 = st.empty()
+# with placeholder4.container():
+#     st.write(st.session_state)
+#     st.write(len(st.session_state.spelers))
+    # for speler in st.session_state.spelers:
+    #     st.write(speler.__dict__)
