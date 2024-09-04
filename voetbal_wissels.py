@@ -19,7 +19,7 @@ for var in ['spelers', 'erin', 'eruit', 'erin_def', 'eruit_def', 'keeper']:
 st.title("Marvilde JO8-3 Wissel Management")
 
 # Configuratie van spelers en wissels
-speler_namen = ("Danielle", "Duuk", "Levi", "Bram", "Noah", "Rowdy", "Lott", "Tom", "Timme")
+speler_namen = sorted(["Danielle", "Duuk", "Levi", "Bram", "Noah", "Rowdy", "Lott", "Tom", "Timme"])
 
 
 doetmee = st.multiselect(
