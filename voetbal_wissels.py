@@ -41,8 +41,10 @@ basis = st.multiselect(
 
 aantal_wisselspelers = len(doetmee) - 6
 
-st.session_state.keeper = st.selectbox("Wie is keeper", basis, index=None)
-
+if st.session_state.keeper == []:
+    st.session_state.keeper = st.selectbox("Wie is keeper", basis, index=None)
+else:
+    st.session_state.keeper = st.selectbox("Wie is keeper", doetmee, index=None)
 # Update de keeper status van alle spelers
 for speler in st.session_state.spelers:
     speler.keeper = speler.naam == st.session_state.keeper
@@ -63,7 +65,6 @@ else:
                     laatste_wissel= None if speler_naam in basis else datetime.now(pytz.timezone('Europe/Amsterdam')).strftime("%H:%M")
                 )
             )
-
 
 placeholder = st.empty()
 
