@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import gmtime, strftime, time
 from typing import Optional
-
+import random
 import pytz
 
 
@@ -22,6 +22,7 @@ class Speler:
         self.in_veld = in_veld
         self.keeper = keeper
         self.laatste_wissel_sec = 0
+        self.random_nr = random.random()
 
 
     def gaat_eruit(self):
