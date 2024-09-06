@@ -19,6 +19,10 @@ for var in ['spelers', 'erin', 'eruit', 'erin_def', 'eruit_def', 'keeper']:
     if var not in st.session_state:
         st.session_state[var] = []
 
+# Inladen van een audiobestand
+audio_file = open('alarm.wav', 'rb')
+audio_bytes = audio_file.read()
+
 
 # Titel van de app
 st.title("Marvilde JO8-3 Wissel Management")
@@ -38,6 +42,11 @@ basis = st.multiselect(
     doetmee,
     max_selections=6
 )
+
+# Inladen van een audiobestand
+audio_file = open('alarm.wav', 'rb')
+audio_bytes = audio_file.read()
+
 
 aantal_wisselspelers = len(doetmee) - 6
 
@@ -137,29 +146,6 @@ if st.button("Wissel"):
 
 
 # Functie om de timer af te laten tellen
-def start_timer():
-    if st.session_state.timer_start is None:  # Alleen starten als er geen timer loopt
-        st.session_state.timer_start = time.time()
-    # Placeholder voor het updaten van de timer in de app
-    # placeholder2 = st.empty()
-    with placeholder2.container():
-        # Timer loop
-        while st.session_state.resterende_tijd > 0:
-            elapsed_time = time.time() - st.session_state.timer_start
-            st.session_state.resterende_tijd = max(0, 5 * 60 - int(elapsed_time))
-            minutes, seconds = divmod(st.session_state.resterende_tijd, 60)
-            formatted_time = f"{int(minutes)}:{int(seconds):02d}"
-
-            # Update de placeholder met de resterende tijd
-            placeholder2.title(f"Tijd tot de volgende wissel: {formatted_time}")
-
-            # Wacht 1 seconde
-            time.sleep(1)
-
-            # Verminder de tijd met 1 seconde
-            # st.session_state.tijd_in_seconden -= 1
-
-# Functie om de timer af te laten tellen
 def update_timer():
     # Bereken de verstreken tijd sinds de timer startte
     elapsed_time = time.time() - st.session_state.timer_start
@@ -167,12 +153,14 @@ def update_timer():
 
     # Als de timer op is, laat een wisselmelding zien
     if st.session_state.resterende_tijd == 0:
-        st.title("Wissel nu!")
+        # Geluid afspelen
+        st.audio(audio_bytes, format='audio/wav', autoplay=True)
 
     # Toon de resterende tijd
     minutes, seconds = divmod(st.session_state.resterende_tijd, 60)
     formatted_time = f"{int(minutes)}:{int(seconds):02d}"
     st.title(f"Tijd tot de volgende wissel: {formatted_time}")
+
 
 # Startknop voor de timer
 if st.button("(Her)start de wisseltimer"):
@@ -195,14 +183,9 @@ else:
     formatted_time = f"{int(minutes)}:{int(seconds):02d}"
     placeholder2.title(f"Tijd tot de volgende wissel: {formatted_time}")
 
-# if st.button("(Her)start timer"):
-#     start_timer()
-
-
-    # placeholder voor session state
+# placeholder voor session state
 # placeholder4 = st.empty()
 # with placeholder4.container():
 #     st.write(st.session_state)
 #     st.write(len(st.session_state.spelers))
-    # for speler in st.session_state.spelers:
-    #     st.write(speler.__dict__)
+
